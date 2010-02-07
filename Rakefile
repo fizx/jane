@@ -11,7 +11,6 @@ begin
     gem.homepage = "http://github.com/fizx/jane"
     gem.authors = ["Kyle Maxwell"]
     gem.add_development_dependency "rspec", ">= 1.2.9"
-    # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
   Jeweler::GemcutterTasks.new
 rescue LoadError
