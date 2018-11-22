@@ -22,7 +22,7 @@ function abspath() {
 
 original=`pwd`
 cd `dirname $0`/..
-cd vendor/swift-protobuf
+cd lib/vendor/swift-protobuf
 make
 cd -
 for i in `find . -name protoc-gen-swift -type f`
@@ -36,10 +36,10 @@ PATH=`pwd`/exe:$PATH
 
 if uname | grep -i darwin
 then
-  PROTOC=`pwd`/vendor/protoc-osx/bin/protoc
+  PROTOC=`pwd`/lib/vendor/protoc-osx/bin/protoc
 else
-  PROTOC=`pwd`/vendor/protoc-linux/bin/protoc
+  PROTOC=`pwd`/lib/vendor/protoc-linux/bin/protoc
 fi
-echo $PROTOC --swift_out=$1 -I vendor/protoc-linux/include proto/*.proto ${@:2}
-$PROTOC --swift_out=$1 -I `dirname $0`/../vendor/protoc-linux/include -I `dirname $0`/../proto ${@:2}
-$PROTOC --jane_out=$1 -I `dirname $0`/../vendor/protoc-linux/include -I `dirname $0`/../proto ${@:2}
+echo $PROTOC --swift_out=$1 -I lib/vendor/protoc-linux/include proto/*.proto ${@:2}
+$PROTOC --swift_out=$1 -I `dirname $0`/../lib/vendor/protoc-linux/include -I `dirname $0`/../proto ${@:2}
+$PROTOC --jane_out=$1 -I `dirname $0`/../lib/vendor/protoc-linux/include -I `dirname $0`/../proto ${@:2}

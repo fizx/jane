@@ -27,7 +27,7 @@ Gem::Specification.new do |spec|
   end
   spec.bindir        = "exe"
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
-  spec.extensions   << "vendor/swift-protobuf/extconf.rb"
+  spec.extensions   << "lib/vendor/swift-protobuf/extconf.rb"
   spec.require_paths = ["lib"]
   
   spec.add_dependency "protobuf-core", "~> 3.5"
