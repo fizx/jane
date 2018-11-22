@@ -7,7 +7,7 @@ require "protobuf/descriptors/google/protobuf/compiler/plugin.pb"
 require "erb"
 
 request = Google::Protobuf::Compiler::CodeGeneratorRequest.decode(STDIN.read)
-template = DATA.read
+template = ERB.new(DATA.read)
 content = template.result(binding)
 file = Google::Protobuf::Compiler::CodeGeneratorResponse::File.new
 file.name = "jane.pb.swift"

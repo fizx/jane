@@ -2,7 +2,7 @@ syntax = "proto2";
 
 import "google/protobuf/descriptor.proto";
 
-package stork;
+package jane;
 
 enum Indexes {
   NONE = 0;
