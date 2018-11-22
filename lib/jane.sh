@@ -41,5 +41,5 @@ else
   PROTOC=`pwd`/vendor/protoc-linux/bin/protoc
 fi
 echo $PROTOC --swift_out=$1 -I vendor/protoc-linux/include proto/*.proto ${@:2}
-$PROTOC --swift_out=$1 -I vendor/protoc-linux/include ${@:2}
-$PROTOC --jane_out=$1 -I vendor/protoc-linux/include ${@:2}
+$PROTOC --swift_out=$1 -I `dirname $0`/../vendor/protoc-linux/include -I `dirname $0`/../proto ${@:2}
+$PROTOC --jane_out=$1 -I `dirname $0`/../vendor/protoc-linux/include -I `dirname $0`/../proto ${@:2}
