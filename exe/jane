@@ -1,2 +1,25 @@
 #!/usr/bin/env ruby
-exec([File.join(File.dirname(__FILE__), "..", "lib", "jane.sh"), "jane"], *ARGV)
+paths = %w[
+  lib/vendor/protoc-*/bin/protoc
+  lib/vendor/swift-protobuf/.build/*/debug/protoc-gen-swift
+]
+
+files = paths.map do |path|
+  Dir[File.join(File.dirname(__FILE__), "..", path)]
+end.flatten
+
+if files.all? {|f| File.executable?(f) }
+  exec([File.join(File.dirname(__FILE__), "..", "lib", "jane.sh"), "jane"], *ARGV)
+else
+  STDERR.puts "Attempting to fix permissions on the protoc compilers we ship"
+  STDERR.puts "with jane. If you sudo install gems, you will need to run this"
+  STDERR.puts "command once with sudo to fix this."
+
+  require "fileutils"
+  files.each do |f|
+    FileUtils.chmod(0755, f)
+  end
+  STDERR.puts "Success!"
+  
+  exec([File.join(File.dirname(__FILE__), "..", "lib", "jane.sh"), "jane"], *ARGV)
+end

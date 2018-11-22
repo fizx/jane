@@ -33,4 +33,11 @@ Gem::Specification.new do |spec|
   spec.add_dependency "protobuf-core", "~> 3.5"
   spec.add_development_dependency "bundler", "~> 1.16"
   spec.add_development_dependency "rake", "~> 10.0"
+  spec.post_install_message = <<-STR
+
+  Jane embeds a protoc compiler and a protoc-swift compiler.  If you are using 
+  System Gems (i.e. you `sudo gem install`), you'll have to run jane with sudo
+  for the first time in order to fix permissions on these compilers.
+
+STR
 end
