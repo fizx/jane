@@ -1,0 +1,19 @@
+#!/usr/bin/env ruby
+require "rubygems"
+require "protobuf"
+require "protobuf/message"
+require "protobuf/descriptors"
+require "protobuf/descriptors/google/protobuf/compiler/plugin.pb"
+require "erb"
+
+request = Google::Protobuf::Compiler::CodeGeneratorRequest.decode(STDIN.read)
+template = DATA.read
+content = template.result(binding)
+file = Google::Protobuf::Compiler::CodeGeneratorResponse::File.new
+file.name = "jane.pb.swift"
+file.content = content
+response = Google::Protobuf::Compiler::CodeGeneratorResponse.new
+response.file << file
+print response.encode
+
+__END__

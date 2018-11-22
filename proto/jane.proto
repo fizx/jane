@@ -1,0 +1,21 @@
+syntax = "proto2";
+
+import "google/protobuf/descriptor.proto";
+
+package stork;
+
+enum Indexes {
+  NONE = 0;
+  PRIMARY = 1;
+  UNIQUE = 2;
+  FOREIGN = 3;
+}
+
+message Index {
+  required Indexes type = 1;
+  repeated int32 keys = 2;
+}
+
+extend google.protobuf.FieldOptions {
+  optional Index index = 50000;
+}
