@@ -1,23 +1,23 @@
 syntax = "proto3";
 
-import "stork.proto";
+import "jane.proto";
 
 message User {
-  string id = 1 [(stork.index).type=PRIMARY];
-  string login = 2 [(stork.index).type=UNIQUE];
+  string id = 1 [(jane.index).type=PRIMARY];
+  string login = 2 [(jane.index).type=UNIQUE];
   string name = 3;
 
-  Account account = 4 [(stork.index).type=FOREIGN];
-  repeated Photo photos = 5 [(stork.index).type=FOREIGN];
+  Account account = 4 [(jane.index).type=FOREIGN];
+  repeated Photo photos = 5 [(jane.index).type=FOREIGN];
 }
 
 message Account {
-  string id = 1 [(stork.index).type=PRIMARY];
+  string id = 1 [(jane.index).type=PRIMARY];
   string encrypted_password = 2;
   string salt = 3;
 }
 
 message Photo {
-  string id = 1 [(stork.index).type=PRIMARY];
+  string id = 1 [(jane.index).type=PRIMARY];
   bytes content = 2;
 }
