@@ -1,14 +1,13 @@
 #!/usr/bin/env ruby
 paths = %w[
-  lib/vendor/protoc-*/bin/protoc
-  lib/vendor/swift-protobuf/.build/*/debug/protoc-gen-swift
+  lib/vendor/**/*
 ]
 
 files = paths.map do |path|
   Dir[File.join(File.dirname(__FILE__), "..", path)]
 end.flatten
 
-if files.all? {|f| File.executable?(f) }
+if files.all? {|f| File.stat(f).mode & 0755 == 0755 }
   exec([File.join(File.dirname(__FILE__), "..", "lib", "jane.sh"), "jane"], *ARGV)
 else
   STDERR.puts "Attempting to fix permissions on the protoc compilers we ship"
@@ -20,6 +19,4 @@ else
     FileUtils.chmod(0755, f)
   end
   STDERR.puts "Success!"
-  
-  exec([File.join(File.dirname(__FILE__), "..", "lib", "jane.sh"), "jane"], *ARGV)
 end
