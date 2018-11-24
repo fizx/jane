@@ -14,6 +14,10 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/fizx/Algorithm.git", from: "2.2.0"),
         .package(url: "https://github.com/apple/swift-protobuf", from: "1.2.0"),
+        .package(url: "https://github.com/Swinject/Swinject", from: "2.5.0"),
+        .package(url: "https://github.com/Swinject/SwinjectAutoregistration", from: "2.5.0"),
+        .package(url: "https://github.com/FutureKit/FutureKit", from: "3.5.0"),
+        
         // Dependencies declare other packages that this package depends on.
         // .package(url: /* package url */, from: "1.0.0"),
     ],
@@ -22,7 +26,7 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages which this package depends on.
         .target(
             name: "Jane",
-            dependencies: ["Algorithm", "SwiftProtobuf"]),
+            dependencies: ["Algorithm", "SwiftProtobuf", "Swinject", "SwinjectAutoregistration", "FutureKit"]),
         .testTarget(
             name: "JaneTests",
             dependencies: ["Jane"]),

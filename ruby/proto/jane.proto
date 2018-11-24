@@ -17,5 +17,5 @@ message Index {
 }
 
 extend google.protobuf.FieldOptions {
-  optional Index index = 50000;
+  optional Index index = 50001;
 }

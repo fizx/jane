@@ -19,7 +19,7 @@ fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAP
   typealias Version = _2
 }
 
-struct User {
+struct Example_User {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -39,8 +39,8 @@ struct User {
     set {_uniqueStorage()._name = newValue}
   }
 
-  var account: Account {
-    get {return _storage._account ?? Account()}
+  var account: Example_Account {
+    get {return _storage._account ?? Example_Account()}
     set {_uniqueStorage()._account = newValue}
   }
   /// Returns true if `account` has been explicitly set.
@@ -48,7 +48,7 @@ struct User {
   /// Clears the value of `account`. Subsequent reads from it will return its default value.
   mutating func clearAccount() {_uniqueStorage()._account = nil}
 
-  var photos: [Photo] {
+  var photos: [Example_Photo] {
     get {return _storage._photos}
     set {_uniqueStorage()._photos = newValue}
   }
@@ -60,7 +60,7 @@ struct User {
   fileprivate var _storage = _StorageClass.defaultInstance
 }
 
-struct Account {
+struct Example_Account {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -76,7 +76,7 @@ struct Account {
   init() {}
 }
 
-struct Photo {
+struct Example_Photo {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
@@ -92,8 +92,10 @@ struct Photo {
 
 // MARK: - Code below here is support for the SwiftProtobuf runtime.
 
-extension User: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = "User"
+fileprivate let _protobuf_package = "example"
+
+extension Example_User: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = _protobuf_package + ".User"
   static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "id"),
     2: .same(proto: "login"),
@@ -106,8 +108,8 @@ extension User: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase,
     var _id: String = String()
     var _login: String = String()
     var _name: String = String()
-    var _account: Account? = nil
-    var _photos: [Photo] = []
+    var _account: Example_Account? = nil
+    var _photos: [Example_Photo] = []
 
     static let defaultInstance = _StorageClass()
 
@@ -166,7 +168,7 @@ extension User: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase,
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: User, rhs: User) -> Bool {
+  static func ==(lhs: Example_User, rhs: Example_User) -> Bool {
     if lhs._storage !== rhs._storage {
       let storagesAreEqual: Bool = withExtendedLifetime((lhs._storage, rhs._storage)) { (_args: (_StorageClass, _StorageClass)) in
         let _storage = _args.0
@@ -185,8 +187,8 @@ extension User: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase,
   }
 }
 
-extension Account: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = "Account"
+extension Example_Account: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = _protobuf_package + ".Account"
   static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "id"),
     2: .standard(proto: "encrypted_password"),
@@ -217,7 +219,7 @@ extension Account: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBa
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: Account, rhs: Account) -> Bool {
+  static func ==(lhs: Example_Account, rhs: Example_Account) -> Bool {
     if lhs.id != rhs.id {return false}
     if lhs.encryptedPassword != rhs.encryptedPassword {return false}
     if lhs.salt != rhs.salt {return false}
@@ -226,8 +228,8 @@ extension Account: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBa
   }
 }
 
-extension Photo: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = "Photo"
+extension Example_Photo: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = _protobuf_package + ".Photo"
   static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "id"),
     2: .same(proto: "content"),
@@ -253,7 +255,7 @@ extension Photo: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: Photo, rhs: Photo) -> Bool {
+  static func ==(lhs: Example_Photo, rhs: Example_Photo) -> Bool {
     if lhs.id != rhs.id {return false}
     if lhs.content != rhs.content {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}

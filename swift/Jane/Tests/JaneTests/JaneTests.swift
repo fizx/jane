@@ -1,15 +1,25 @@
 import XCTest
+import Swinject
+import SwinjectAutoregistration
 @testable import Jane
 
 final class JaneTests: XCTestCase {
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct
-        // results.
-        XCTAssertEqual(Jane().text, "Hello, World!")
+    func testCanBind() {
+        let c = Container()
+        c.autoregister(RawStorage.self, initializer: MemoryStorage.init)
+        Example_Binder.bind(c)
+    }
+    
+    func testHappyPathFind() {
+        let c = Container()
+        c.autoregister(RawStorage.self, initializer: MemoryStorage.init)
+        Example_Binder.bind(c)
+        let repo = c.resolve(Example_User.repository())
+        let user = Example_User.with { $0.login = "kyle" }
+        await(repo.save(user))
     }
 
     static var allTests = [
-        ("testExample", testExample),
+        ("testExample", testCanBind, testHappyPathFind),
     ]
 }

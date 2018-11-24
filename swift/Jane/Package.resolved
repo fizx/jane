@@ -11,12 +11,39 @@
         }
       },
       {
+        "package": "FutureKit",
+        "repositoryURL": "https://github.com/FutureKit/FutureKit",
+        "state": {
+          "branch": null,
+          "revision": "1fdf5826019ff6e3ac427a87c185d3beca1ee2bb",
+          "version": "3.5.0"
+        }
+      },
+      {
         "package": "SwiftProtobuf",
         "repositoryURL": "https://github.com/apple/swift-protobuf",
         "state": {
           "branch": null,
           "revision": "86c579d280d629416c7bd9d32a5dfacab8e0b0b4",
           "version": "1.2.0"
+        }
+      },
+      {
+        "package": "Swinject",
+        "repositoryURL": "https://github.com/Swinject/Swinject",
+        "state": {
+          "branch": null,
+          "revision": "1429e3a23b7b6b98882f11ea4b94d150dd5fc275",
+          "version": "2.5.0"
+        }
+      },
+      {
+        "package": "SwinjectAutoregistration",
+        "repositoryURL": "https://github.com/Swinject/SwinjectAutoregistration",
+        "state": {
+          "branch": null,
+          "revision": "62f652117f0af0657b79e539c7090ee34e5a51c7",
+          "version": "2.5.1"
         }
       }
     ]

@@ -6,6 +6,31 @@ require "protobuf/descriptors"
 require "protobuf/descriptors/google/protobuf/compiler/plugin.pb"
 require "erb"
 
+def prefix(file)
+  file.package ? 
+    file.package.split(".").map{ |seg| seg.capitalize + "_" }.join("") :
+    ""
+end
+
+def type_label(field)
+  "string"
+end
+
+class Indexes < ::Protobuf::Enum
+  define :NONE, 0
+  define :PRIMARY, 1
+  define :UNIQUE, 2
+  define :FOREIGN, 3
+end
+
+class Index < ::Protobuf::Message
+  required Indexes, :type, 1
+  repeated :int32, :keys, 2
+end
+
+Google::Protobuf::FieldOptions.optional Index, :index, 50001
+bindings = {}
+
 request = Google::Protobuf::Compiler::CodeGeneratorRequest.decode(STDIN.read)
 template = ERB.new(DATA.read)
 content = template.result(binding)
@@ -17,3 +42,58 @@ response.file << file
 print response.encode
 
 __END__
+import Jane
+import Swinject
+import SwinjectAutoregistration
+<%
+desired = request.file_to_generate.to_set
+request.proto_file.select{|f| desired.include?(f.name) }.each do |file|
+  bindings[file] ||= []
+  file.message_type.each do |message| 
+    klass = prefix(file)+message.name
+    bindings[file] << klass
+    primary_key = nil
+    unique_keys = []
+    foreign_keys = {}
+    message.field.each do |field|
+      index_type = field.options && field.options.index && field.options.index.type
+      case index_type
+      when Indexes::PRIMARY; primary_key = field
+      end
+    end
+    %>  
+    
+    class <%=klass%>Repository: Repository {
+    }
+    
+    extension <%=klass%>: StorageMappable {
+      func toValue() -> BytesWrapper {
+        return BytesWrapper(data: try! serializedData())
+      } 
+      func primaryIndex() -> BytesWrapper? {
+        <% if primary_key %>
+          return BytesWrapper(<%=type_label(primary_key) %>: self.<%=primary_key.name%>)
+        <% else %>
+          return nil
+        <% end %>
+      }
+      func secondaryIndexes() -> [Index: BytesWrapper] {
+        return [:]
+      }
+      
+      static func repository() -> <%=klass%>Repository.Type {
+        return <%=klass%>Repository.self
+      }
+    }
+  <% end %>
+<% end %>
+
+<% bindings.each do |file, klasses|%>
+  class <%=prefix(file)%>Binder {
+    static func bind(_ container: Container) {
+      <% klasses.each do |klass| %>
+        container.autoregister(<%=klass%>Repository.self, initializer: <%=klass%>Repository.init)
+      <% end %>
+    }
+  }
+<% end %>
