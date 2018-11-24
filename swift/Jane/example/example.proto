@@ -23,3 +23,15 @@ message Photo {
   string id = 1 [(jane.index).type=PRIMARY];
   bytes content = 2;
 }
+
+service HelloService {
+  rpc SayHello (HelloRequest) returns (HelloResponse);
+}
+
+message HelloRequest {
+  string greeting = 1;
+}
+
+message HelloResponse {
+  string reply = 1;
+}

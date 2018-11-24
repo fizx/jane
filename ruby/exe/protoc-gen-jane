@@ -16,6 +16,14 @@ def type_label(field)
   "string"
 end
 
+def type(field)
+  "String"
+end
+
+def caps(s)
+  s.capitalize
+end
+
 class Indexes < ::Protobuf::Enum
   define :NONE, 0
   define :PRIMARY, 1
@@ -42,6 +50,7 @@ response.file << file
 print response.encode
 
 __END__
+import Promises
 import Jane
 import Swinject
 import SwinjectAutoregistration
@@ -63,7 +72,18 @@ request.proto_file.select{|f| desired.include?(f.name) }.each do |file|
     end
     %>  
     
-    class <%=klass%>Repository: Repository {
+    class <%=klass%>Repository: Repository<<%=klass%>> {
+      <% if primary_key %>
+        func findBy<%=caps(primary_key.name)%>(_ key: <%=type(primary_key) %>) -> Promise<<%=klass%>?> {
+          return self.storage.get(key: BytesWrapper(<%=type_label(primary_key)%>: key)).then { (maybeBytes: BytesWrapper?) -> <%=klass%>? in
+            if let bytes = maybeBytes {
+              return try! <%=klass%>(serializedData: bytes.toData())
+            } else {
+              return nil
+            }
+          }
+        }
+      <% end %>
     }
     
     extension <%=klass%>: StorageMappable {

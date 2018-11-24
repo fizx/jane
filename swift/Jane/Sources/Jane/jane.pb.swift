@@ -1,9 +1,21 @@
+import Promises
 import Jane
 import Swinject
 import SwinjectAutoregistration
   
     
-    class Example_UserRepository: Repository {
+    class Example_UserRepository: Repository<Example_User> {
+      
+        func findById(_ key: String) -> Promise<Example_User?> {
+          return self.storage.get(key: BytesWrapper(string: key)).then { (maybeBytes: BytesWrapper?) -> Example_User? in
+            if let bytes = maybeBytes {
+              return try! Example_User(serializedData: bytes.toData())
+            } else {
+              return nil
+            }
+          }
+        }
+      
     }
     
     extension Example_User: StorageMappable {
@@ -25,7 +37,18 @@ import SwinjectAutoregistration
     }
     
     
-    class Example_AccountRepository: Repository {
+    class Example_AccountRepository: Repository<Example_Account> {
+      
+        func findById(_ key: String) -> Promise<Example_Account?> {
+          return self.storage.get(key: BytesWrapper(string: key)).then { (maybeBytes: BytesWrapper?) -> Example_Account? in
+            if let bytes = maybeBytes {
+              return try! Example_Account(serializedData: bytes.toData())
+            } else {
+              return nil
+            }
+          }
+        }
+      
     }
     
     extension Example_Account: StorageMappable {
@@ -47,7 +70,18 @@ import SwinjectAutoregistration
     }
     
     
-    class Example_PhotoRepository: Repository {
+    class Example_PhotoRepository: Repository<Example_Photo> {
+      
+        func findById(_ key: String) -> Promise<Example_Photo?> {
+          return self.storage.get(key: BytesWrapper(string: key)).then { (maybeBytes: BytesWrapper?) -> Example_Photo? in
+            if let bytes = maybeBytes {
+              return try! Example_Photo(serializedData: bytes.toData())
+            } else {
+              return nil
+            }
+          }
+        }
+      
     }
     
     extension Example_Photo: StorageMappable {
@@ -67,6 +101,52 @@ import SwinjectAutoregistration
         return Example_PhotoRepository.self
       }
     }
+    
+    
+    class Example_HelloRequestRepository: Repository<Example_HelloRequest> {
+      
+    }
+    
+    extension Example_HelloRequest: StorageMappable {
+      func toValue() -> BytesWrapper {
+        return BytesWrapper(data: try! serializedData())
+      } 
+      func primaryIndex() -> BytesWrapper? {
+        
+          return nil
+        
+      }
+      func secondaryIndexes() -> [Index: BytesWrapper] {
+        return [:]
+      }
+      
+      static func repository() -> Example_HelloRequestRepository.Type {
+        return Example_HelloRequestRepository.self
+      }
+    }
+    
+    
+    class Example_HelloResponseRepository: Repository<Example_HelloResponse> {
+      
+    }
+    
+    extension Example_HelloResponse: StorageMappable {
+      func toValue() -> BytesWrapper {
+        return BytesWrapper(data: try! serializedData())
+      } 
+      func primaryIndex() -> BytesWrapper? {
+        
+          return nil
+        
+      }
+      func secondaryIndexes() -> [Index: BytesWrapper] {
+        return [:]
+      }
+      
+      static func repository() -> Example_HelloResponseRepository.Type {
+        return Example_HelloResponseRepository.self
+      }
+    }
   
 
 
@@ -79,6 +159,10 @@ import SwinjectAutoregistration
         container.autoregister(Example_AccountRepository.self, initializer: Example_AccountRepository.init)
       
         container.autoregister(Example_PhotoRepository.self, initializer: Example_PhotoRepository.init)
+      
+        container.autoregister(Example_HelloRequestRepository.self, initializer: Example_HelloRequestRepository.init)
+      
+        container.autoregister(Example_HelloResponseRepository.self, initializer: Example_HelloResponseRepository.init)
       
     }
   }

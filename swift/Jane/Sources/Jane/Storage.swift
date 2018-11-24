@@ -1,5 +1,6 @@
 import Algorithm
 import Foundation
+import Promises
 
 struct Index: Hashable {
     var name: BytesWrapper
@@ -20,11 +21,11 @@ protocol StorageMappable {
 }
 
 protocol RawStorage {
-    func get(key: BytesWrapper, handler: @escaping (BytesWrapper?) -> ())
-    func range(from: BytesWrapper, to: BytesWrapper, inclusive: Bool, handler: @escaping ([BytesWrapper]) -> ())
-    func put(key: BytesWrapper, value: BytesWrapper, handler: @escaping () -> ())
-    func remove(key: BytesWrapper, handler: @escaping () -> ())
-    func transactionally(key: BytesWrapper, transaction: @escaping () -> (), handler: @escaping () -> ())
+    func get(key: BytesWrapper) -> Promise<BytesWrapper?>
+    func range(from: BytesWrapper, to: BytesWrapper, inclusive: Bool) -> Promise<[BytesWrapper]>
+    func put(key: BytesWrapper, value: BytesWrapper) -> Promise<Void>
+    func remove(key: BytesWrapper) -> Promise<Void>
+    func transactionally(key: BytesWrapper, transaction: @escaping () -> Promise<Void>) -> Promise<Void>
 }
 
 struct BytesWrapper: Comparable, Equatable, Hashable, Codable {
@@ -38,6 +39,11 @@ struct BytesWrapper: Comparable, Equatable, Hashable, Codable {
     init(string: String) {
         self.array = Array(string.utf8)
     }
+    
+    func toData() -> Data {
+        return Data(self.array)
+    }
+    
     static func < (lhs: BytesWrapper, rhs: BytesWrapper) -> Bool {
         for (l, r) in zip(lhs.array, rhs.array) {
             if (l < r) {
@@ -54,11 +60,11 @@ struct BytesWrapper: Comparable, Equatable, Hashable, Codable {
 class MemoryStorage: RawStorage {
     private var raw = SortedDictionary<BytesWrapper, BytesWrapper>()
     
-    func get(key: BytesWrapper, handler: @escaping (BytesWrapper?) -> ()) {
-        handler(raw.findValue(for: key))
+    func get(key: BytesWrapper) -> Promise<BytesWrapper?>{
+        return Promise(raw.findValue(for: key))
     }
     
-    func range(from: BytesWrapper, to: BytesWrapper, inclusive: Bool = false, handler: @escaping ([BytesWrapper]) -> ()) {
+    func range(from: BytesWrapper, to: BytesWrapper, inclusive: Bool) -> Promise<[BytesWrapper]> {
         var answers: [BytesWrapper] = []
         for key in raw.keys {
             if key < from || key > to {
@@ -71,22 +77,21 @@ class MemoryStorage: RawStorage {
                 answers.append(value)
             }
         }
-        handler(answers)
+        return Promise(answers)
     }
     
-    func put(key: BytesWrapper, value: BytesWrapper, handler: @escaping () -> ()) {
+    func put(key: BytesWrapper, value: BytesWrapper) -> Promise<Void> {
         raw.update(value: value, for: key)
-        handler()
+        return Promise(())
     }
     
-    func remove(key: BytesWrapper, handler: @escaping () -> ()) {
+    func remove(key: BytesWrapper) -> Promise<Void> {
         raw.removeValue(for: key)
-        handler()
+        return Promise(())
     }
     
     // It's a lie.  We don't do anything transactionally.
-    func transactionally(key: BytesWrapper, transaction: @escaping () -> (), handler: @escaping () -> ()) {
-        transaction()
-        handler()
+    func transactionally(key: BytesWrapper, transaction: @escaping () -> Promise<Void>) -> Promise<Void> {
+        return transaction()
     }
 }

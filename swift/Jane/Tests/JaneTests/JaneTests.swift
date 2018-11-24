@@ -1,24 +1,30 @@
 import XCTest
 import Swinject
 import SwinjectAutoregistration
+import Promises
 @testable import Jane
 
 final class JaneTests: XCTestCase {
-    func testCanBind() {
-        let c = Container()
+    var c: Container = Container()
+    
+    override func setUp() {
+        DispatchQueue.promises = .global()
         c.autoregister(RawStorage.self, initializer: MemoryStorage.init)
         Example_Binder.bind(c)
     }
     
-    func testHappyPathFind() {
-        let c = Container()
-        c.autoregister(RawStorage.self, initializer: MemoryStorage.init)
-        Example_Binder.bind(c)
-        let repo = c.resolve(Example_User.repository())
-        let user = Example_User.with { $0.login = "kyle" }
-        await(repo.save(user))
+    func testCanBind() {
     }
-
+    
+    func testHappyPathFind() throws {
+        let repo = c.resolve(Example_User.repository())!
+        let user = Example_User.with { $0.id = "kyle" }
+        try await(repo.save(user))
+        let saved = try await(repo.findById(user.id))
+        XCTAssertNotNil(saved)
+        XCTAssertEqual(saved?.id, user.id)
+    }
+    
     static var allTests = [
         ("testExample", testCanBind, testHappyPathFind),
     ]
