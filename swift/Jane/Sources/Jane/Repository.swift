@@ -1,5 +1,6 @@
 import Promises
 import SwiftProtobuf
+import Dispatch
 
 class Repository<V: StorageMappable> {
     let storage: RawStorage
@@ -7,9 +8,12 @@ class Repository<V: StorageMappable> {
         self.storage = storage
     }
     
-    func save(_ obj: V) -> Promise<Void> {
-        let key = obj.primaryIndex()
-        let value = obj.toValue()
-        return self.storage.put(key: key!, value: value)
+    func save(_ objs: V...) -> Promise<Void> {
+        let promises = objs.map { obj -> Promise<Void> in
+            let key = obj.primaryIndex()
+            let value = obj.toValue()
+            return self.storage.put(key: key!, value: value)
+        }
+        return all(promises).void
     }
 }

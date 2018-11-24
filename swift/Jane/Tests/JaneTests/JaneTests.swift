@@ -16,7 +16,7 @@ final class JaneTests: XCTestCase {
     func testCanBind() {
     }
     
-    func testHappyPathFind() throws {
+    func testFindOne() throws {
         let repo = c.resolve(Example_User.repository())!
         let user = Example_User.with { $0.id = "kyle" }
         try await(repo.save(user))
@@ -25,7 +25,16 @@ final class JaneTests: XCTestCase {
         XCTAssertEqual(saved?.id, user.id)
     }
     
+    func testFindAll() throws {
+        let repo = c.resolve(Example_User.repository())!
+        let a = Example_User.with { $0.id = "kyle" }
+        let b = Example_User.with { $0.id = "kyle" }
+        try await(repo.save(a, b))
+        let saved = try await(repo.findByIds([a.id, b.id, "unknown"]))
+        XCTAssertEqual(saved, [a, b, nil])
+    }
+    
     static var allTests = [
-        ("testExample", testCanBind, testHappyPathFind),
+        ("testExample", testCanBind, testFindOne, testFindAll),
     ]
 }

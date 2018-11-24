@@ -74,6 +74,7 @@ request.proto_file.select{|f| desired.include?(f.name) }.each do |file|
     
     class <%=klass%>Repository: Repository<<%=klass%>> {
       <% if primary_key %>
+        // findOne
         func findBy<%=caps(primary_key.name)%>(_ key: <%=type(primary_key) %>) -> Promise<<%=klass%>?> {
           return self.storage.get(key: BytesWrapper(<%=type_label(primary_key)%>: key)).then { (maybeBytes: BytesWrapper?) -> <%=klass%>? in
             if let bytes = maybeBytes {
@@ -82,6 +83,15 @@ request.proto_file.select{|f| desired.include?(f.name) }.each do |file|
               return nil
             }
           }
+        }
+        // findAllArray
+        func findBy<%=caps(primary_key.name)%>s(_ keys: [<%=type(primary_key) %>]) -> Promise<[<%=klass%>?]> {
+          return all(keys.map{ findBy<%=caps(primary_key.name)%>($0)})
+        }
+        
+        // findAllVariadic
+        func findBy<%=caps(primary_key.name)%>s(_ keys: <%=type(primary_key) %>...) -> Promise<[<%=klass%>?]> {
+          return all(keys.map{ findBy<%=caps(primary_key.name)%>($0)})
         }
       <% end %>
     }

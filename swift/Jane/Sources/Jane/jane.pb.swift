@@ -6,6 +6,7 @@ import SwinjectAutoregistration
     
     class Example_UserRepository: Repository<Example_User> {
       
+        // findOne
         func findById(_ key: String) -> Promise<Example_User?> {
           return self.storage.get(key: BytesWrapper(string: key)).then { (maybeBytes: BytesWrapper?) -> Example_User? in
             if let bytes = maybeBytes {
@@ -14,6 +15,15 @@ import SwinjectAutoregistration
               return nil
             }
           }
+        }
+        // findAllArray
+        func findByIds(_ keys: [String]) -> Promise<[Example_User?]> {
+          return all(keys.map{ findById($0)})
+        }
+        
+        // findAllVariadic
+        func findByIds(_ keys: String...) -> Promise<[Example_User?]> {
+          return all(keys.map{ findById($0)})
         }
       
     }
@@ -39,6 +49,7 @@ import SwinjectAutoregistration
     
     class Example_AccountRepository: Repository<Example_Account> {
       
+        // findOne
         func findById(_ key: String) -> Promise<Example_Account?> {
           return self.storage.get(key: BytesWrapper(string: key)).then { (maybeBytes: BytesWrapper?) -> Example_Account? in
             if let bytes = maybeBytes {
@@ -47,6 +58,15 @@ import SwinjectAutoregistration
               return nil
             }
           }
+        }
+        // findAllArray
+        func findByIds(_ keys: [String]) -> Promise<[Example_Account?]> {
+          return all(keys.map{ findById($0)})
+        }
+        
+        // findAllVariadic
+        func findByIds(_ keys: String...) -> Promise<[Example_Account?]> {
+          return all(keys.map{ findById($0)})
         }
       
     }
@@ -72,6 +92,7 @@ import SwinjectAutoregistration
     
     class Example_PhotoRepository: Repository<Example_Photo> {
       
+        // findOne
         func findById(_ key: String) -> Promise<Example_Photo?> {
           return self.storage.get(key: BytesWrapper(string: key)).then { (maybeBytes: BytesWrapper?) -> Example_Photo? in
             if let bytes = maybeBytes {
@@ -80,6 +101,15 @@ import SwinjectAutoregistration
               return nil
             }
           }
+        }
+        // findAllArray
+        func findByIds(_ keys: [String]) -> Promise<[Example_Photo?]> {
+          return all(keys.map{ findById($0)})
+        }
+        
+        // findAllVariadic
+        func findByIds(_ keys: String...) -> Promise<[Example_Photo?]> {
+          return all(keys.map{ findById($0)})
         }
       
     }
