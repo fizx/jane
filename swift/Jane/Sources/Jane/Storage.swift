@@ -81,7 +81,12 @@ class MemoryStorage: RawStorage {
     }
     
     func put(key: BytesWrapper, value: BytesWrapper) -> Promise<Void> {
-        raw.update(value: value, for: key)
+        if raw.findValue(for: key) != nil {
+            raw.update(value: value, for: key)
+        } else {
+            raw.insert(value: value, for: key)
+        }
+        
         return Promise(())
     }
     
