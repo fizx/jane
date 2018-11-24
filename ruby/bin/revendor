@@ -17,9 +17,9 @@ wget ${PROTOC_URL} --output-document="protoc-${PROTOC_VERSION}.zip"
 unzip "protoc-${PROTOC_VERSION}.zip" -d lib/vendor/protoc-osx
 rm "protoc-${PROTOC_VERSION}.zip"
 
-cd lib/vendor
-git clone https://github.com/apple/swift-protobuf
-rm -rf swift-protobuf/.git
+cd lib/vendor 
+git clone https://github.com/grpc/grpc-swift
+rm -rf grpc-swift/.git
 
 cd -
-cp lib/extconf.rb lib/vendor/swift-protobuf
+touch lib/vendor/grpc-swift/extconf.rb

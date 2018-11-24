@@ -1,0 +1,14 @@
+.DS_Store
+project.xcworkspace
+xcuserdata
+DerivedData/
+.build
+build
+/protoc-gen-swift
+/protoc-gen-swiftgrpc
+third_party/**
+/Echo
+/test.out
+/echo.pid
+/SwiftGRPC.xcodeproj
+Package.resolved
